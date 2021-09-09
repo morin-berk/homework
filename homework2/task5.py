@@ -2,8 +2,8 @@ from typing import List, Iterable
 
 
 def custom_range(iterable: Iterable, *stop: (str, int)) -> List:
-    """The function accepts any iterable of unique values
-     and then it behaves as range function"""
+    """The function accepts any iterable 
+        of unique values and then it behaves as range function"""
     if len(stop) == 1:
         return [el for el in iterable if el < stop[0]]
     elif len(stop) == 2:

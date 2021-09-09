@@ -7,11 +7,9 @@ def func(a: int, b: int) -> int:
 
 
 def cache(funct: Callable) -> Callable:
-    """
-    Cache accepts another function as an argument. Then it
+    """Cache accepts another function as an argument. Then it
     returns such a function, so the every call to initial one
-    should be cached
-    """
+    should be cached"""
     cach = {}
 
     def memoized_func(*args):

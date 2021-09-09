@@ -50,7 +50,7 @@ def count_punctuation_chars(file_name: str) -> int:
 
 
 def count_non_ascii_chars(file_name: str) -> int:
-    """Counting every non ascii char"""
+    """Counting every non ascii char """
     num_of_non_ascii = 0
     with open(file_name, encoding='unicode-escape', errors='ignore') as file:
         for el in file:

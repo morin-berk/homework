@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 def major_and_minor_elem(inp: List) -> Tuple[int, int]:
     """Given an array of size n, the func finds the most common
-    and the least common elements"""
+    and the least common elements """
     frequency = {}
     for el in inp:
         if el in frequency:

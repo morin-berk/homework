@@ -2,7 +2,7 @@ from homework1.task5 import custom_range
 import string
 
 
-def test_positive_case():
+def test_positive_cases():
     assert custom_range(string.ascii_lowercase, 'g') == \
            ['a', 'b', 'c', 'd', 'e', 'f']
     assert custom_range(string.ascii_lowercase, 'g', 'p') == \

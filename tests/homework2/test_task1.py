@@ -1,5 +1,6 @@
 from homework1.task1 import get_longest_diverse_words, \
-    count_non_ascii_chars, get_most_common_non_ascii_char, \
+    count_non_ascii_chars, \
+    get_most_common_non_ascii_char, \
     get_rarest_char, count_punctuation_chars
 
 

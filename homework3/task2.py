@@ -13,7 +13,7 @@ def slow_calculate(value):
 
 
 def multiprocessing():
-    """Running a func through multiprocessing module"""
+    """Running a func through multiprocessing module """
     if __name__ == '__main__':
         start = time.perf_counter()
         freeze_support()
