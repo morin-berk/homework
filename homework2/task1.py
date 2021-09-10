@@ -13,10 +13,10 @@ def get_longest_diverse_words(file_name: str) -> List[str]:
         words_set = list(filter(None, words_set))
         words_set = set([word for line in words_set for word in line.split()])
         words_set = set([word.replace('.', '').replace('»', '').
-                         replace('«', '').replace('-', '').replace('(', '').
-                         replace(')', '').replace(';', '')
-                        .replace(':', '').replace(',', '') 
-                         for word in words_set])
+                         replace('«', '').replace('-', '').
+                         replace('(', '').replace(')', '').
+                         replace(';', '').replace(':', '').
+                         replace(',', '') for word in words_set])
         # Counting amount of unique letters in each word
         sym_words_dict = {}
         for el in words_set:
