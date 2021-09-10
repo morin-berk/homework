@@ -2,7 +2,9 @@ from typing import List
 
 
 def get_longest_diverse_words(file_name: str) -> List[str]:
-    """Finding 10 longest words consisting from largest amount of unique symbols"""
+    """
+    Finding 10 longest words consisting from largest amount of unique symbols
+    """
     words_set = set()
     with open(file_name, encoding='unicode-escape', errors='ignore') as file:
         # Getting a list of unique words
@@ -10,9 +12,11 @@ def get_longest_diverse_words(file_name: str) -> List[str]:
             words_set.add(el.strip())
         words_set = list(filter(None, words_set))
         words_set = set([word for line in words_set for word in line.split()])
-        words_set = set([word.replace('.', '').replace('»', '').replace('«', '').
-                        replace('-', '').replace('(', '').replace(')', '').replace(';', '')
-                        .replace(':', '').replace(',', '') for word in words_set])
+        words_set = set([word.replace('.', '').replace('»', '').
+                         replace('«', '').replace('-', '').replace('(', '').
+                         replace(')', '').replace(';', '')
+                        .replace(':', '').replace(',', '') 
+                         for word in words_set])
         # Counting amount of unique letters in each word
         sym_words_dict = {}
         for el in words_set:
