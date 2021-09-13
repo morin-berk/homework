@@ -3,7 +3,7 @@ from typing import Iterable, Sequence
 
 def check_fibonacci(data: Sequence[int]) -> bool:
     """
-    check_fibonacci() accepts a Sequence of integers, and
+    The func accepts a Sequence of integers, and
     returns if the given sequence is a Fibonacci sequence
     """
     def fib_gen(n: int) -> Iterable:

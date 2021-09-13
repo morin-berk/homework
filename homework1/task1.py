@@ -1,4 +1,4 @@
-""" Check: is the number a power of two """
+"""Check: is the number a power of two"""
 
 
 def check_power_of_2(a: int) -> bool:

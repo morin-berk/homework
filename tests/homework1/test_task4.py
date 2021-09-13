@@ -2,7 +2,7 @@ from homework1.task4 import check_sum_of_four
 
 
 def test_positive_case():
-    """ Checking right answers """
+    """Checking right answers """
     assert check_sum_of_four([0, 2], [-3, 5], [2, 1], [1, -7]) == 2
     assert check_sum_of_four([1, 2, 3], [-1, -2, -3],
                              [4, 5, 6], [-4, -5, -6]) == 19

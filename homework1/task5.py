@@ -5,7 +5,7 @@ def find_maximal_subarray_sum(nums: List[int], k: int) -> int:
     """
     Given a list of integers numbers "nums", the func finds
     a sub-array with length less or equal to "k", with maximal sum.
-    It returns the sum of this sub-array.
+    It returns the sum of this sub-array
     """
     if k > len(nums):
         k = len(nums)

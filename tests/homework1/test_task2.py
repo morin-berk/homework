@@ -14,6 +14,6 @@ def test_positive_case(test_input):
                          ([13, 22, 34, 55, 89, 144, 233, 377])])
 def test_negative_case(test_input):
     """
-    Checking how the func works with False fib sequences
+    Checking how the func works with False fib sequences.
     """
     assert not check_fibonacci(test_input)
