@@ -1,4 +1,4 @@
-from homework0.task1 import check_power_of_2
+from homework1.task1 import check_power_of_2
 
 
 def test_positive_case():

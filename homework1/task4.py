@@ -8,12 +8,11 @@ def check_sum_of_four(a: List[int], b: List[int],
     computes how many tuples (i, j, k, h)
     there are such that A[i] + B[j] + C[k] + D[h] is zero.
     """
-    num_tuples = 0
-    assert len(a) == len(b) == len(c) == len(d)
-    for i in a:
-        for j in b:
-            for k in c:
-                for h in d:
-                    if i + j + k + h == 0:
-                        num_tuples += 1
-    return num_tuples
+    sum_zero = 0
+    sum_first_two = [(el1 + el2) for el1 in a for el2 in b]
+    sum_second_two = [(el3 + el4) for el3 in c for el4 in d]
+    for sum1 in sum_first_two:
+        for sum2 in sum_second_two:
+            if sum1 + sum2 == 0:
+                sum_zero += 1
+    return sum_zero
