@@ -8,10 +8,3 @@ def test_positive_case():
                              [4, 5, 6], [-4, -5, -6]) == 19
     assert check_sum_of_four([10, 3, 4, 5], [10, 3, 4, -7],
                              [10, 3, 4, 4], [9, 3, 4, -2]) == 2
-
-
-def test_negative_case():
-    """ Checking wrong answers """
-    assert not check_sum_of_four([1], [-2], [10], [-100]) == 1
-    assert not check_sum_of_four([0, 2], [3, -2], [-2, -10], [-1, 10]) == 1
-    assert not check_sum_of_four([0, 2], [3, -2], [-2, -10], [-1, 10]) == 3

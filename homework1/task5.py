@@ -9,13 +9,16 @@ def find_maximal_subarray_sum(nums: List[int], k: int) -> int:
     """
     if k > len(nums):
         k = len(nums)
-    max_value = sum(nums[:k])
+    final_max_value = nums[0]
+    index_counter = 1
     for el in range(k + 1):
-        i, n = 0, el
-        while len(nums) >= n:
-            max_value1 = sum((nums[i:n]))
-            i += 1
-            n += 1
-            if max_value1 > max_value:
-                max_value = max_value1
-    return max_value
+        first_el, last_el = 0, index_counter
+        while last_el <= len(nums) and index_counter <= k:
+            curr_max_value = sum((nums[first_el:last_el]))
+            first_el += 1
+            last_el += 1
+            if curr_max_value > final_max_value:
+                final_max_value = curr_max_value
+        last_el = index_counter + 1
+        index_counter = last_el
+    return final_max_value

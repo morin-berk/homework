@@ -13,12 +13,10 @@ def check_fibonacci(data: Sequence[int]) -> bool:
             a, b = b, a + b
 
     last_el = data[-1]
-    l_fib = list(el for el in fib_gen(last_el))
-    print(l_fib[::-1])
-    if data == [0, 1]:
-        return True
-    else:
-        for el1, el2 in zip(data[::-1], l_fib[::-1]):
-            if el1 != el2:
-                return False
+    perfect_fib = list(el for el in fib_gen(last_el))
+
+    if len(data) < 3:
+        return False
+    if data[::-1] != perfect_fib[:-len(data) - 1:-1]:
+        return False
     return True
