@@ -1,3 +1,4 @@
+import pickle
 from typing import Callable
 
 
@@ -12,13 +13,14 @@ def cache(funct: Callable) -> Callable:
     returns such a function, so the every call to initial one
     should be cached
     """
-    cach = {}
+    cache_dict = {}
 
-    def memoized_func(*args):
-        if args in cach:
-            return cach[args]
+    def memoized_func(*args, **kwargs) -> Callable:
+        key = pickle.dumps((args, kwargs))
+        if key in cache_dict:
+            return cache_dict[key]
         result = funct(*args)
-        cach[args] = result
+        cache_dict[key] = result
         return result
 
     return memoized_func
