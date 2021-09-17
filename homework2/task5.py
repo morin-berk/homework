@@ -1,4 +1,4 @@
-from typing import List, Iterable
+from typing import Iterable, List
 
 
 def custom_range(iterable: Iterable, *slices: (str, int)) -> List:

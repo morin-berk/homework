@@ -1,5 +1,6 @@
-from homework2.task5 import custom_range
 import string
+
+from homework2.task5 import custom_range
 
 
 def test_positive_case():
