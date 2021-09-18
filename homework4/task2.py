@@ -9,10 +9,10 @@ def html_i_count(url: str) -> int or str:
     i_counter = 0
     try:
         response = requests.get(url)
-        if response.status_code == 200:
-            for el in response.text:
-                if el == 'i':
-                    i_counter += 1
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions:
         raise ValueError("Unreachable {url}")
+    if response.status_code == 200:
+        for el in response.text:
+            if el == 'i':
+                i_counter += 1
     return i_counter

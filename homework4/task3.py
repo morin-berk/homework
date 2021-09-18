@@ -7,6 +7,6 @@ def my_precious_logger(text: str):
     if line starts with "error"
     and to the stdout otherwise
     """
-    if list(text.split())[0] == 'error':
+    if text.startswith('error'):
         return sys.stderr.write(text + '\n')
     return sys.stdout.write(text + '\n')

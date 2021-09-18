@@ -9,7 +9,7 @@ from homework4.task1 import read_magic_number
 def temporary_file(data) -> str:
     temp_dir = tempfile.gettempdir()
     temp_file = f"{temp_dir}/sample.txt"
-    with open(temp_file, "w") as f:
+    with open(temp_file, "w", encoding='utf8') as f:
         f.write(data)
     return temp_file
 
@@ -32,11 +32,20 @@ def test_read_magic_number_negative_test(temporary_file, data, expected):
     assert read_magic_number(temporary_file) is expected
 
 
-@pytest.mark.parametrize('data', ['This is str not int'])
-def test_read_magic_number_negative_errors(temporary_file, data):
+@pytest.mark.parametrize('data', ['str'])
+def test_read_magic_number_value_error(temporary_file, data):
     """
     Checking whether the func raises ValueError
     if the first line data is not int
     """
     with pytest.raises(ValueError):
         read_magic_number(temporary_file)
+
+
+def test_read_magic_number_file_not_exist_error():
+    """
+    Checking whether the func raises ValueError
+    if the func cannot open a file
+    """
+    with pytest.raises(ValueError):
+        read_magic_number('some_file.txt')

@@ -7,10 +7,8 @@ def read_magic_number(path: str) -> bool:
     try:
         with open(path, 'r', encoding='utf8') as file:
             first_line = file.readline()
-            if not int(first_line):
-                raise ValueError('The first line is not int')
-            if 1 <= int(first_line) < 3:
-                return True
-            return False
     except FileNotFoundError:
-        print('Cannot find the file')
+        raise ValueError
+    if not int(first_line):
+        raise ValueError('The first line is not int')
+    return 1 <= int(first_line) < 3
