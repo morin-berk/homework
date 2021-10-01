@@ -9,13 +9,10 @@ def get_list_of_words(file_name: str) -> List[str]:
     Cleaning it from ''
     """
     words_list = []
-    try:
-        with open(file_name, encoding='unicode-escape',
-                  errors='ignore') as file:
-            for el in file:
-                words_list.append(el.strip())
-    finally:
-        file.close()
+    with open(file_name, encoding='unicode-escape',
+              errors='ignore') as file:
+        for el in file:
+            words_list.append(el.strip())
     words_list = list(filter(None, words_list))
     return words_list
 
