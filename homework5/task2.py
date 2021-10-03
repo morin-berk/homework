@@ -2,6 +2,11 @@ import functools
 
 
 def return_doc_name_func_attr(func):
+    """
+    Wraps a decorator, allowing to return info about
+    original function with __doc__, __name__.
+    Also returns original func with __original_func.
+    """
     def wrapper(dec_func):
         setattr(dec_func, '__doc__', func.__doc__)
         setattr(dec_func, '__name__', func.__name__)
@@ -11,6 +16,8 @@ def return_doc_name_func_attr(func):
 
 
 def print_result(func):
+    """Allows to print result of a wrapped func
+    without print() method"""
     @return_doc_name_func_attr(func)
     def wrapper(*args, **kwargs):
         """Function-wrapper which print result
