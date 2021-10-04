@@ -20,43 +20,25 @@ example_tree = {
 
 
 def find_occurrences(tree: dict, element: Any) -> int:
-    """
-        Takes nested dict, element,
-        and finds number of element occurrences
-    """
+    """Recursive func walks through any(dict, set, tuple, list)
+    and counts number of element occurrences with
+    nonlocal counter."""
     counter = 0
 
-    def find_occurrences_recursive(tree: Iterable, el: Any) -> Iterable:
-        """
-        Recursive func walks through any(dict, set, tuple, list)
-        and counts number of element occurrences with
+    def find_occurrences_recursive(tree: Any) -> Any:
         nonlocal counter
-        """
-        nonlocal counter
-
         if isinstance(tree, dict):
             for key, value in tree.items():
-                if key == el:
+                if key == element:
                     counter += 1
-                if value == el:
-                    counter += 1
-                elif isinstance(value, (dict, list, set, tuple)):
-                    return find_occurrences_recursive(value, el)
-        elif isinstance(tree, (list, set, tuple)):
-            for iterable in tree:
-                if iterable == el:
-                    counter += 1
-                elif isinstance(iterable, (list, set, tuple, dict))\
-                        and iterable:
-                    return find_occurrences_recursive(iterable, el)
+                find_occurrences_recursive(value)
+        elif isinstance(tree, Iterable) and not isinstance(tree, str):
+            for k in tree:
+                find_occurrences_recursive(k)
+        if tree == element:
+            counter += 1
 
-    for key, value in tree.items():
-        if key == element:
-            counter += 1
-        if value == element:
-            counter += 1
-        elif isinstance(value, (dict, list, set, tuple)):
-            find_occurrences_recursive(value, element)
+    find_occurrences_recursive(tree)
     return counter
 
 

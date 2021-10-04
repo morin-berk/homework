@@ -57,3 +57,10 @@ def test_find_occurrences_values():
     among dict values
     """
     assert find_occurrences(example_tree, "RED") == 6
+
+
+def test_nonexisting_value():
+    """
+    Testing with a value, which a dict doesn`t contain
+    """
+    assert find_occurrences(example_tree, "GREEN") == 0
