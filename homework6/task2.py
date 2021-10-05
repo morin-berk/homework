@@ -1,5 +1,6 @@
 import datetime
 from collections import defaultdict
+from typing import Type
 
 
 class DeadlineError(Exception):
@@ -45,14 +46,14 @@ class EducationPerson:
 class Student(EducationPerson):
     """This is a simple model of a student."""
     @staticmethod
-    def do_homework(homework: Homework, solution: str):
+    def do_homework(homework: Homework, solution: str) -> 'HomeworkResult':
         """Takes as an input a Homework class object and
         checks if it has timed out though is_active() method.
         :param homework: takes Homework class obj
         :param solution: text of a homework solution
         :return: Homework obj, if it hasn`t timed out, else None"""
         if homework.is_active():
-            return HomeworkResult(Student, homework, solution)
+            return HomeworkResult(Type[Student], homework, solution)
         raise DeadlineError('You`re late')
 
 
@@ -66,7 +67,7 @@ class HomeworkResult:
     Also creates datetime.datetime.today() object, marking
     when Homework is created.
     """
-    def __init__(self, author, homework: Homework, solution: str):
+    def __init__(self, author: Student, homework: Homework, solution: str):
         if not isinstance(homework, Homework):
             raise ValueError('You gave not a Homework object')
         self.homework = homework
