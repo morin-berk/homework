@@ -3,7 +3,7 @@ from functools import wraps
 from typing import Callable
 
 
-def cache(times):
+def cache(times) -> Callable:
     """Cache accepts another function as an argument. Then it
     returns such a function, so the every call to initial one
     should be cached"""
