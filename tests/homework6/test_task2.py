@@ -4,25 +4,15 @@ from homework6.task2 import (DeadlineError, Homework, HomeworkResult, Student,
                              Teacher)
 
 
-class TestHomework:
-    @staticmethod
-    def test_homework_class():
-        """Testing if Homework().is_active method
-        raises DeadlineError Exception"""
-        hw = Homework('something', 0)
-        with pytest.raises(DeadlineError):
-            hw.is_active()
+def test_homework_class():
+    """Testing if Homework().is_active method
+    returns False if deadline is over"""
+    hw = Homework('something', 0)
+    assert not hw.is_active()
 
 
 class TestStudent:
     student = Student('Nobody', 'Nobody')
-
-    @classmethod
-    def test_student_do_homework_negative(cls):
-        """Testing if Student().do_homework() raises an exception
-        and returns the error message if homework has timed out"""
-        hw = Homework('something', 0)
-        assert cls.student.do_homework(hw, 'solution') == 'You`re late'
 
     @classmethod
     def test_student_do_homework_positive(cls):
@@ -30,6 +20,14 @@ class TestStudent:
         a class object if homework has not timed out"""
         hw = Homework('something', 1)
         assert cls.student.do_homework(hw, 'solution')
+
+    @classmethod
+    def test_student_do_homework_negative(cls):
+        """Testing if Student().do_homework() raises DeadlineError
+        if a homework has timed out"""
+        hw = Homework('something', -1)
+        with pytest.raises(DeadlineError):
+            cls.student.do_homework(hw, 'solution')
 
     @classmethod
     def test_homework_result_class(cls):
@@ -73,10 +71,10 @@ class TestTeacher:
         Homework objects from homework_done dictionary
         """
         hw2 = Homework('another task', 2)
-        hw_result1 = HomeworkResult(cls.student,
-                                    cls.hw, "I've done some task")
-        hw_result2 = HomeworkResult(cls.student,
-                                    hw2, "The task is done")
+        hw_result1 = HomeworkResult(cls.student, cls.hw,
+                                    "I've done some task")
+        hw_result2 = HomeworkResult(cls.student, hw2,
+                                    "The task is done")
         Teacher.check_homework(hw_result1)
         Teacher.check_homework(hw_result2)
         print(Teacher.homework_done)

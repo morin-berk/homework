@@ -22,7 +22,7 @@ def instances_counter(cls):
         _counter = 0
 
         def __new__(cls, *args, **kwargs):
-            instance = super().__new__(cls, *args, **kwargs)
+            instance = super().__new__(cls)
             Wrapper._counter += 1
             return instance
 

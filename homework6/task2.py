@@ -8,58 +8,65 @@ class DeadlineError(Exception):
 
 class Homework:
     """
-    Takes a homework task, deadline as an input,
-    saves the date of creation.
-    is_active method checks if a homework has timed out
+    This is a simple model of a homework. Additionally to arguments,
+    creates datetime.datetime.today() object, marking
+    when Homework is created.
+    :param text: task
+    :param deadline: int > 0, responsible for generating
+    datetime.timedelta object`s days
     """
     def __init__(self, text: str, deadline: int):
         self.text = text
-        self.deadline = datetime.timedelta(days=deadline)
+        if deadline < 0:
+            self.deadline = datetime.timedelta(days=0)
+        else:
+            self.deadline = datetime.timedelta(days=deadline)
         self.created = datetime.datetime.today()
 
-    def is_active(self) -> bool or DeadlineError:
-        """Checks if a homework has timed out"""
+    def is_active(self) -> bool:
+        """Checks if a homework has timed out.
+        Creates today`s datetime obj, compares it to
+        the time of a homework creation."""
         time_now = datetime.datetime.today()
-        if not time_now - self.created < self.deadline:
-            raise DeadlineError
-        return True
+        return time_now - self.created < self.deadline
 
 
 class EducationPerson:
     """
-    Takes the first, the second name as an input.
-    Superclass over Student, Teacher classes
+    Superclass over Student, Teacher classes.
+    :param last_name: person`s last name
+    :param first_name: person`s first name
     """
-    def __init__(self, last_name, first_name):
+    def __init__(self, last_name: str, first_name: str):
         self.last_name = last_name
         self.first_name = first_name
 
 
 class Student(EducationPerson):
-    """
-    Takes a students first, second name.
-    do_homework method takes a Homework object as an input,
-    checks if it has timed out
-    """
+    """This is a simple model of a student."""
     @staticmethod
     def do_homework(homework: Homework, solution: str):
         """Takes as an input a Homework class object and
-        checks if it has timed out"""
-        try:
-            homework.is_active()
+        checks if it has timed out though is_active() method.
+        :param homework: takes Homework class obj
+        :param solution: text of a homework solution
+        :return: Homework obj, if it hasn`t timed out, else None"""
+        if homework.is_active():
             return HomeworkResult(Student, homework, solution)
-        except DeadlineError:
-            return 'You`re late'
+        raise DeadlineError('You`re late')
 
 
 class HomeworkResult:
     """
-    Takes Student class object, Homework class objects,
-    solution(str) as arguments.
-    Checks if Homework arg belongs to Homework class.
-    If not, raises ValueError
+    This is a simple model of o homework result.
+    :param author: takes a student
+    :param homework: takes a homework, checks
+    if Homework arg belongs to Homework class
+    :param solution: text of a homework solution
+    Also creates datetime.datetime.today() object, marking
+    when Homework is created.
     """
-    def __init__(self, author, homework, solution: str):
+    def __init__(self, author, homework: Homework, solution: str):
         if not isinstance(homework, Homework):
             raise ValueError('You gave not a Homework object')
         self.homework = homework
@@ -70,30 +77,33 @@ class HomeworkResult:
 
 class Teacher(EducationPerson):
     """
-    Takes a teacher`s first, second name as an input.
-    create_homework creates a Homework object,
-    taking a task and a deadline as an input
+    This is a simple model of a teacher.
+    Stores a defaultdict(list), which saves data from
+    HomeworkResult: homework obj as a key,
+    solution str as a value.
     """
     homework_done = defaultdict(list)
 
     @staticmethod
     def create_homework(task_text: str, deadline: int) -> Homework:
-        """
-        Takes a task and a deadline as an input and
-        creates a Homework object
+        """Creates a Homework object.
+        :param task_text: takes task
+        :param deadline: takes int > 0, responsible for generating
+        datetime.timedelta object`s days
+        :return: Homework class object
         """
         return Homework(task_text, deadline)
 
     @classmethod
     def check_homework(cls, hw_result: HomeworkResult) -> bool:
         """Takes HomeworkResult object as an argument,
-        checks if it`s longer than 5 symbols, and in positive case
+        checks if it`s longer than 5 symbols, and, in positive case,
         adds Homework object as a key, solution as a value in
-        homework_done dictionary"""
-        hw_done = cls.homework_done
-        hw_solution, hw_hw = hw_result.solution, hw_result.homework
-        if len(hw_solution) > 5:
-            hw_done[hw_hw].append(hw_solution)
+        homework_done dictionary
+        :param hw_result: HomeworkResult obj, containing Homework obj,
+        solution str"""
+        if len(hw_result.solution) > 5:
+            cls.homework_done[hw_result.homework].append(hw_result.solution)
             return True
         return False
 
@@ -105,6 +115,7 @@ class Teacher(EducationPerson):
         Homework class, if yes, then deletes corresponding
         key from homework_done dict.
         If there is no arguments, then it clears out the dict
+        :param result: Homework result
         """
         if result is None:
             cls.homework_done.clear()
