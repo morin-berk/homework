@@ -8,8 +8,8 @@ class KeyValueStorage:
         self.storage = {}
         with open(file_path, 'r', encoding='utf-8') as f:
             for line in f:
-                self.storage[line[:line.find('=')]] = \
-                    line[line.find('=') + 1:].strip()
+                line = line.strip().split('=')
+                self.storage[line[0]] = line[1]
         for key, value in self.storage.items():
             if value.isdigit():
                 self.storage[key] = int(value)

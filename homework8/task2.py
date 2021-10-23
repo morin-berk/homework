@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Iterable, Tuple
 
 
 class TableData:
@@ -11,35 +12,38 @@ class TableData:
         self.database_name = database_name
         self.table_name = table_name
 
-        conn = sqlite3.connect(self.database_name)
-        conn.row_factory = sqlite3.Row
-        self.cursor = conn.cursor()
+        self.conn = sqlite3.connect(self.database_name)
+        self.conn.row_factory = sqlite3.Row
+        self.cursor = self.conn.cursor()
 
     def __len__(self) -> int:
         """Gives current amount of rows in presidents table in database."""
-        counter = 0
-        for _ in self.cursor.execute(f'SELECT * from {self.table_name}'):
-            counter += 1
-        return counter
+        return self.cursor.execute(f'SELECT COUNT(*) '
+                                   f'from {self.table_name}').fetchone()[0]
 
-    def __getitem__(self, item: str):
+    def __getitem__(self, item: str) -> Tuple[str]:
         """If an item is a table header, returns all values in it.
         If an item is a value, returns single data row
         from table_name if there is an item in it.
         """
-        for row in self.cursor.execute(f"SELECT * from {self.table_name}"):
-            if item in row:
-                return tuple(row)
-            elif item in row.keys():
-                return row[item]
+        self.cursor.execute(f"SELECT * from {self.table_name} "
+                            f"WHERE author=:item", {'item': item})
+        return tuple(self.cursor.fetchone())
 
-    def __contains__(self, item):
+    def __contains__(self, item: str) -> bool:
         """Returns True if an item in a table."""
-        for row in self.cursor.execute(f'SELECT * from {self.table_name}'):
-            if item in row:
-                return True
+        self.cursor.execute(f"SELECT * from {self.table_name} "
+                            f"WHERE author=:item", {'item': item})
+        if tuple(self.cursor.fetchone()):
+            return True
 
-    def __iter__(self) -> sqlite3.Row:
+    def __iter__(self) -> Iterable:
         """Implements iteration protocol."""
-        for row in self.cursor.execute(f'SELECT * from {self.table_name}'):
-            yield row
+        return iter(self.cursor.execute(f'SELECT * from {self.table_name}'))
+
+    def __enter__(self) -> 'TableData':
+        return self
+
+    def __exit__(self, ext_type, exc_value, traceback) -> None:
+        self.cursor.close()
+        self.conn.close()
