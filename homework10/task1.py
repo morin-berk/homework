@@ -4,59 +4,56 @@ import time
 from typing import Callable, Optional
 
 import aiohttp
-import requests
 from bs4 import BeautifulSoup
 
 company_data = []
 
 
-def get_curr_ruble_exchange_rate() -> float:
+async def get_curr_ruble_exchange_rate(session) -> float:
     """
     Reach cbr.ru and collects current ruble_exchange_rate.
     """
     url = "http://www.cbr.ru/scripts/XML_daily.asp"
-    try:
-        response = requests.get(url)
-    except requests.exceptions:
-        raise ValueError("Unreachable {url}")
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'lxml')
-        find_value = soup.find(id='R01235').value.text.replace(',', '.')
-        return float(find_value)
-
-
-async def get_tab_pages(session, page_id: int) -> None:
-    """Generates urls for tab pages with lists of companies.
-    Checks connection, gets page text,
-    pass received text to get_companies_url."""
-    url = f'https://markets.businessinsider.com' \
-          f'/index/components/s&p_500?p={page_id}'
     async with session.get(url) as resp:
         if resp.status == 200:
             resp_text = await resp.text()
-            await get_companies_url(session, resp_text)
+            soup = BeautifulSoup(resp_text, 'lxml')
+            find_value = soup.find(id='R01235').value.text.replace(',', '.')
+            return float(find_value)
 
 
-async def get_companies_url(session, response_text: str) -> None:
-    """Receives a page text from get_tab_pages,
-    finds part of company url, growth, adds them into
+async def get_tab_pages(page_id: int) -> str:
+    """Generates urls for tab pages with lists of companies."""
+    url = f'https://markets.businessinsider.com' \
+          f'/index/components/s&p_500?p={page_id}'
+    return url
+
+
+async def get_companies_url(session, url: str, rubles: float) -> None:
+    """
+    Receives url, checks connection, gets page text,
+    pass received text to get_companies_url.
+    Finds part of company url, growth, adds them into
     company_data list of dist. Pass part of url to get_company_data.
     """
-    soup = BeautifulSoup(response_text, "lxml")
-    company_url = soup.findAll("td", class_="table__td table__td--big")
-    growth = soup.findAll('td', class_='table__td')[7] \
-        .text.split()[1].strip('%')
+    async with session.get(url) as resp:
+        if resp.status == 200:
+            resp_text = await resp.text()
+            soup = BeautifulSoup(resp_text, "lxml")
+            company_url = soup.findAll("td", class_="table__td table__td--big")
+            growth = soup.findAll('td', class_='table__td')[7] \
+                .text.split()[1].strip('%')
 
-    for tags in company_url:
-        comp_url = tags.find('a').get('href')
-        url = f'https://markets.businessinsider.com{comp_url}'
-        global company_data
-        company_data.append({'url': url, 'growth': float(growth)})
+            for tags in company_url:
+                comp_url = tags.find('a').get('href')
+                url = f'https://markets.businessinsider.com{comp_url}'
+                global company_data
+                company_data.append({'url': url, 'growth': float(growth)})
 
-        await get_company_data(session, url)
+                await get_company_data(session, url, rubles)
 
 
-async def get_company_data(session, com_url: str) -> None:
+async def get_company_data(session, com_url: str, rubles: float) -> None:
     """
     Adds name, price, code, pe_ratio, potential_profit
     to company data list of dict.
@@ -71,96 +68,113 @@ async def get_company_data(session, com_url: str) -> None:
         if dictionary['url'] == com_url:
             dictionary.update({
                 'name': get_name(soup), 'code': get_code(soup),
-                'price': get_price(soup),
-                'potential_profit': get_potential_profit(get_week_high,
-                                                         get_week_low, soup),
+                'price': get_price(soup) * rubles,
+                'potential_profit': get_potential_profit(
+                    soup, get_week_high, get_week_low) * rubles,
                 'pe_ratio': get_pe_ratio(soup)
             })
 
 
 async def gather_data() -> None:
     """
+    Gets ruble exchange rate, a list of tab pages. Passes them to
+    get_companies_url func.
     Creates tasks with asyncio, establish connection aiohttp session.
     """
     async with aiohttp.ClientSession() as session:
-        tasks = [get_tab_pages(session, num) for num in range(1, 12)]
+        rubles = await get_curr_ruble_exchange_rate(session)
+        initial_pages = [await get_tab_pages(num) for num in range(1, 12)]
+        tasks = []
+        for page in initial_pages:
+            tasks.append(get_companies_url(session, page, rubles))
         await asyncio.gather(*tasks)
 
 
-def get_week_low(soup) -> Optional[float]:
+def get_week_low(soup: BeautifulSoup) -> Optional[float]:
     """Gets a value of 52 Week Low."""
+    week_low_tag = soup.find(
+        class_="snapshot__data-item snapshot__data-item--small")
     try:
-        week_low = soup.find(
-            class_="snapshot__data-item snapshot__data-item--small"
-        ).text.split()[0].replace(',', '')
-        return float(week_low)
+        week_low_tag.text
     except AttributeError:
         pass
+    else:
+        week_low = week_low_tag.text.split()[0].replace(',', '')
+        return float(week_low)
 
 
-def get_week_high(soup) -> Optional[float]:
+def get_week_high(soup: BeautifulSoup) -> Optional[float]:
     """Gets a value of 52 Week High."""
-    week_high_preprocessing = \
+    week_high_tag = \
         soup.find("div", class_="snapshot__data-item snapshot__"
                                 "data-item--small snapshot__data-item--right")
     try:
-        week_high = week_high_preprocessing.text.split()[0].replace(',', '')
-        return float(week_high)
+        week_high_tag.text
     except AttributeError:
         pass
+    else:
+        week_high = week_high_tag.text.split()[0].replace(',', '')
+        return float(week_high)
 
 
-def get_potential_profit(week_high: Callable,
-                         week_low: Callable, soup) -> float:
+def get_potential_profit(soup: BeautifulSoup, week_high: Callable,
+                         week_low: Callable) -> float:
     """Calculates a profit if bought at the lowest
      and sold at the highest in the last year."""
     try:
-        potential_profit = \
-            (week_high(soup) - week_low(soup)) * get_curr_ruble_exchange_rate()
+        potential_profit = week_high(soup) - week_low(soup)
         return potential_profit
     except TypeError:
         return 0.0
 
 
-def get_code(soup) -> Optional[str]:
+def get_code(soup: BeautifulSoup) -> Optional[str]:
     """Gets a company code"""
+    code_tag = soup.find("span", class_="price-section__category")
     try:
-        code = soup.find("span", class_="price-section__category") \
-            .find('span').text.strip(', ')
+        code_tag.text
+    except AttributeError:
+        pass
+    else:
+        code = code_tag.find('span').text.strip(', ')
         return code
-    except AttributeError:
-        pass
 
 
-def get_name(soup) -> Optional[str]:
+def get_name(soup: BeautifulSoup) -> Optional[str]:
     """Gets a company name."""
+    name_tag = soup.find("span", class_="price-section__label")
     try:
-        name = soup.find("span", class_="price-section__label").text.strip()
+        name_tag.text
+    except AttributeError:
+        pass
+    else:
+        name = name_tag.text.strip()
         return name
-    except AttributeError:
-        pass
 
 
-def get_price(soup) -> Optional[float]:
+def get_price(soup: BeautifulSoup) -> float:
     """Gets a share value converted into rubles."""
+    price_tag = soup.find("span", class_="price-section__current-value")
     try:
-        price = soup.find("span", class_="price-section__current-value") \
-            .text.replace(',', '')
-        return float(price)*get_curr_ruble_exchange_rate()
+        price_tag.text
     except AttributeError:
-        pass
+        return 0.0
+    else:
+        price = price_tag.text.replace(',', '')
+        return float(price)
 
 
-def get_pe_ratio(soup) -> float:
+def get_pe_ratio(soup: BeautifulSoup) -> float:
     """Gets the PE Ratio of a company."""
+    pe_ratio_tag = soup.find("div", class_="snapshot__header",
+                             text='P/E Ratio')
     try:
-        pe_ratio = soup.find(
-            "div", class_="snapshot__header",
-            text='P/E Ratio'
-        ).parent.text.split()[0].replace(',', '')
-        return float(pe_ratio)
+        pe_ratio_tag.text
     except AttributeError:
         return 100.000
+    else:
+        pe_ratio = pe_ratio_tag.parent.text.split()[0].replace(',', '')
+        return float(pe_ratio)
 
 
 def sort_and_save_results_to_json(key: str, file_name: str) -> None:
@@ -174,7 +188,7 @@ def sort_and_save_results_to_json(key: str, file_name: str) -> None:
         } for d in company_data]
     new_dict_sorted = sorted(new_dict, key=lambda k: k[key], reverse=True)
     with open(file_name, 'w', encoding='utf-8') as f:
-        json.dump(new_dict_sorted[:10], f)
+        json.dump(new_dict_sorted[:10], f, ensure_ascii=False, indent=2)
 
 
 if __name__ == "__main__":
@@ -187,4 +201,4 @@ if __name__ == "__main__":
     sort_and_save_results_to_json('potential_profit', 'top_10_by_income.json')
     sort_and_save_results_to_json('pe_ratio', 'top_10_by_pe_ratio.json')
     print("--- %s seconds ---" % (time.time() - start_time))
-    # running time 104.66454195976257 seconds
+    # running time 49.071895599365234 seconds

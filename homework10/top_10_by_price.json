@@ -1,1 +1,52 @@
-[{"name": "NVR Inc.", "code": "NVR", "price": 358583.00186}, {"name": "Amazon", "code": "AMZN", "price": 245907.45329}, {"name": "Alphabet C (ex Google)", "code": "GOOG", "price": 204135.34595}, {"name": "Alphabet A (ex Google)", "code": "GOOGL", "price": 203272.021625}, {"name": "Booking Holdings Inc Registered Shs", "code": "BKNG", "price": 172743.02605}, {"name": "Chipotle Mexican Grill Inc.", "code": "CMG", "price": 130154.49101499999}, {"name": "AutoZone Inc.", "code": "AZO", "price": 126282.67682}, {"name": "Mettler-Toledo International Inc.", "code": "MTD", "price": 101524.80895499999}, {"name": "BlackRock Inc.", "code": "BLK", "price": 64019.584389999996}, {"name": "Tesla", "code": "TSLA", "price": 60965.619}]
+[
+  {
+    "name": "NVR Inc.",
+    "code": "NVR",
+    "price": 342959.809035
+  },
+  {
+    "name": "Amazon",
+    "code": "AMZN",
+    "price": 233733.04008
+  },
+  {
+    "name": "Alphabet C (ex Google)",
+    "code": "GOOG",
+    "price": 194460.52546
+  },
+  {
+    "name": "Alphabet A (ex Google)",
+    "code": "GOOGL",
+    "price": 192820.78085
+  },
+  {
+    "name": "Booking Holdings Inc Registered Shs",
+    "code": "BKNG",
+    "price": 169540.33492000002
+  },
+  {
+    "name": "AutoZone Inc.",
+    "code": "AZO",
+    "price": 128218.49021
+  },
+  {
+    "name": "Chipotle Mexican Grill Inc.",
+    "code": "CMG",
+    "price": 123767.053495
+  },
+  {
+    "name": "Tesla",
+    "code": "TSLA",
+    "price": 72799.611
+  },
+  {
+    "name": "BlackRock Inc.",
+    "code": "BLK",
+    "price": 65225.085
+  },
+  {
+    "name": "Equinix Inc",
+    "code": "EQIX",
+    "price": 57669.495315
+  }
+]

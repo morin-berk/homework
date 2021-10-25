@@ -1,1 +1,52 @@
-[{"name": "Regeneron Pharmaceuticals Inc.", "code": "REGN", "potential_profit": 17452.65191}, {"name": "West Pharmaceutical Services Inc.", "code": "WST", "potential_profit": 15738.082695}, {"name": "Thermo Fisher Scientific Inc", "code": "TMO", "potential_profit": 13032.289254999996}, {"name": "Willis Towers Watson PLC", "code": "WLTW", "potential_profit": 6576.89708}, {"name": "Huntington Ingalls Industries Inc.", "code": "HII", "potential_profit": 6046.823049999999}, {"name": "Lowe's Companies Inc.", "code": "LOW", "potential_profit": 5474.115719999999}, {"name": "Raymond James Financial Inc.", "code": "RJF", "potential_profit": 3713.36043}, {"name": "D.R. Horton Inc.", "code": "DHI", "potential_profit": 3021.2798599999996}, {"name": "Western Digital Corp.", "code": "WDC", "potential_profit": 2955.9087999999992}, {"name": "Marathon Petroleum Corporation", "code": "MPC", "potential_profit": 2923.933825}]
+[
+  {
+    "name": "Tesla",
+    "code": "TSLA",
+    "potential_profit": 7069.557599999997
+  },
+  {
+    "name": "NVR Inc.",
+    "code": "NVR",
+    "potential_profit": 5599.53848000001
+  },
+  {
+    "name": "Alphabet A (ex Google)",
+    "code": "GOOGL",
+    "potential_profit": 3576.8595
+  },
+  {
+    "name": "Amazon",
+    "code": "AMZN",
+    "potential_profit": 3513.7384500000258
+  },
+  {
+    "name": "Alphabet C (ex Google)",
+    "code": "GOOG",
+    "potential_profit": 3374.8721399999927
+  },
+  {
+    "name": "Booking Holdings Inc Registered Shs",
+    "code": "BKNG",
+    "potential_profit": 3238.1098650000054
+  },
+  {
+    "name": "Chipotle Mexican Grill Inc.",
+    "code": "CMG",
+    "potential_profit": 2604.795330000007
+  },
+  {
+    "name": "AutoZone Inc.",
+    "code": "AZO",
+    "potential_profit": 2297.6062199999997
+  },
+  {
+    "name": "Mettler-Toledo International Inc.",
+    "code": "MTD",
+    "potential_profit": 1698.657590000002
+  },
+  {
+    "name": "Moderna Inc",
+    "code": "MRNA",
+    "potential_profit": 1596.2612199999994
+  }
+]
