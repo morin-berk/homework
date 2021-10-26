@@ -1,0 +1,52 @@
+[
+  {
+    "name": "SBA Communications REIT (A)",
+    "code": "SBAC",
+    "pe_ratio": 1298.5
+  },
+  {
+    "name": "Hilton Worldwide Holdings Inc Registered Shs When Issued",
+    "code": "HLT",
+    "pe_ratio": 1070.91
+  },
+  {
+    "name": "General Electric",
+    "code": "GE",
+    "pe_ratio": 1053.78
+  },
+  {
+    "name": "Marriott Inc.",
+    "code": "MAR",
+    "pe_ratio": 713.94
+  },
+  {
+    "name": "Baker Hughes Inc.",
+    "code": "BKR",
+    "pe_ratio": 684.57
+  },
+  {
+    "name": "Booking Holdings Inc Registered Shs",
+    "code": "BKNG",
+    "pe_ratio": 460.92
+  },
+  {
+    "name": "Tesla",
+    "code": "TSLA",
+    "pe_ratio": 299.31
+  },
+  {
+    "name": "TJX Cos. Inc.",
+    "code": "TJX",
+    "pe_ratio": 251.56
+  },
+  {
+    "name": "UDR Inc",
+    "code": "UDR",
+    "pe_ratio": 184.81
+  },
+  {
+    "name": "Regency Centers Corp.",
+    "code": "REG",
+    "pe_ratio": 171.35
+  }
+]
